@@ -17,6 +17,7 @@ class _ComplaintState extends State<Complaint>
   TextEditingController _houseController = new TextEditingController();
   TextEditingController _colonyController = new TextEditingController();
   TextEditingController _detailsController = new TextEditingController();
+  TextEditingController _consumerController = new TextEditingController();
 
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
@@ -31,6 +32,7 @@ class _ComplaintState extends State<Complaint>
     _colonyController.dispose();
     _detailsController.dispose();
     _animationController.dispose();
+    _consumerController.dispose();
     super.dispose();
   }
 
@@ -119,7 +121,8 @@ class _ComplaintState extends State<Complaint>
                               maxLines: 1,
                               validator: (value) {
                                 if (value.isEmpty ||
-                                    value.length < 1 && value.length > 10) {
+                                    value.length < 1 && value.length > 10 ||
+                                    int.parse(value) < 5555555555) {
                                   return 'Please enter a valid phone number';
                                 }
                               },
@@ -356,6 +359,34 @@ class _ComplaintState extends State<Complaint>
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               autocorrect: false,
+                              controller: _consumerController,
+                              maxLines: 1,
+                              validator: (value) {},
+                              decoration: InputDecoration(
+                                  icon: Icon(
+                                    Icons.person_outline,
+                                    size: 40,
+                                    color: Colors.black,
+                                  ),
+                                  enabledBorder: InputBorder.none,
+                                  labelText: 'Consumer Id',
+                                  hintText: "Enter a Consumer Id",
+                                  labelStyle: TextStyle(
+                                      decorationStyle:
+                                          TextDecorationStyle.solid)),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(20)),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              autocorrect: false,
                               controller: _detailsController,
                               maxLines: null,
                               validator: (value) {
@@ -415,13 +446,18 @@ class _ComplaintState extends State<Complaint>
                                     ));
                               }
                               if (_formkey.currentState.validate()) {
+                                String now =
+                                    (DateTime.now().millisecondsSinceEpoch %
+                                            1000)
+                                        .toString();
                                 String refNum =
-                                    "PWL${_nameController.text.substring(0, 3).toUpperCase()}${_phoneController.text}";
+                                    "PWL${_nameController.text.substring(0, 3).toUpperCase()}${_phoneController.text}$now";
                                 print(refNum);
                                 await databaseReference
                                     .collection("complaints")
                                     .document(refNum)
                                     .setData({
+                                  'consumerId': _consumerController.text,
                                   'name': _nameController.text,
                                   'phone': _phoneController.text,
                                   'house no': _houseController.text,

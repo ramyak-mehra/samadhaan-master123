@@ -58,7 +58,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         ));
                       },
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(0),
                         width: MediaQuery.of(context).size.width * .3,
                         height: MediaQuery.of(context).size.width * .3,
                         decoration: BoxDecoration(
