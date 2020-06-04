@@ -78,7 +78,8 @@ class _TrackingState extends State<Tracking>
                   child: IconButton(
                     onPressed: () async {
                       if (_trackingController.text != null &&
-                          _trackingController.text.length == 16) {
+                          (_trackingController.text.length >= 17) &&
+                          _trackingController.text.length <= 19) {
                         String trackID = _trackingController.text;
                         bool check = await checkExist(trackID: trackID);
                         print(check);

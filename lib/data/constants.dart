@@ -272,52 +272,66 @@ Widget bottomSheet(String title, String refNum, BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
-      return Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 46),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Icon(
-              Icons.check_circle_outline,
-              size: 200,
-              color: Colors.black,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Tracking Number:",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 30),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              refNum,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 36),
-            ),
-            Text(
-              '*Note down the tracking ID or take Screenshot',
-              style: TextStyle(
-                  color: Colors.red, fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-          ],
+      return Expanded(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 46),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Flexible(
+                child: Hero(
+                  tag: '',
+                  child: Icon(
+                    Icons.check_circle_outline,
+                    size: 200,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Flexible(
+                child: Hero(
+                  tag: "1",
+                  child: Text(
+                    "Tracking Number:",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 25),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                refNum,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
+              ),
+              Text(
+                '*Note down the tracking ID or take Screenshot',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
+              ),
+            ],
+          ),
         ),
       );
     },
