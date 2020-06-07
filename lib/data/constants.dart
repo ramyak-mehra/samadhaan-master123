@@ -321,7 +321,7 @@ Widget bottomSheet(String title, String refNum, BuildContext context) {
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 24),
+                    fontSize: 30),
               ),
               Text(
                 '*Note down the tracking ID or take Screenshot',
