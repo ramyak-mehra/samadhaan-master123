@@ -468,7 +468,9 @@ class _ComplaintState extends State<Complaint>
                                   'details': _detailsController.text,
                                   'current department': _selectedDepartment,
                                   'date': DateTime.now().toString(),
-                                  'status': "Processing"
+                                  'status': "Processing",
+                                  'trackingId': refNum,
+                                  'remarks': null
                                 }).then((value) => print("Success"));
                                 bottomSheet("SUCCESS!", refNum, context);
                               }
