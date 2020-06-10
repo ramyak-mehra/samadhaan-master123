@@ -472,7 +472,7 @@ class _ComplaintState extends State<Complaint>
                                   'trackingId': refNum,
                                   'AdminRemark': null,
                                   'DepartmentRemark': null,
-                                  'Ignored':null
+                                  'Ignored': null
                                 }).then((value) => print("Success"));
                                 bottomSheet("SUCCESS!", refNum, context);
                               }
