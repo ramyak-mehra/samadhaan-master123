@@ -470,7 +470,8 @@ class _ComplaintState extends State<Complaint>
                                   'date': DateTime.now().toString(),
                                   'status': "Processing",
                                   'trackingId': refNum,
-                                  'remarks': null
+                                  'AdminRemark': null,
+                                  'DepartmentRemark': null
                                 }).then((value) => print("Success"));
                                 bottomSheet("SUCCESS!", refNum, context);
                               }
