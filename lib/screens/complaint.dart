@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:samadhan/data/constants.dart';
+import 'package:samadhan/widgets/bottomsheet.dart';
 
 class Complaint extends StatefulWidget {
   @override
@@ -20,6 +22,7 @@ class _ComplaintState extends State<Complaint>
   TextEditingController _consumerController = new TextEditingController();
 
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _selectedDepartment;
   String _wardNumber;
@@ -38,7 +41,6 @@ class _ComplaintState extends State<Complaint>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 600));
@@ -51,6 +53,7 @@ class _ComplaintState extends State<Complaint>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: scaffoldKey,
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Center(
@@ -91,6 +94,7 @@ class _ComplaintState extends State<Complaint>
                                 if (value.isEmpty || value.length < 1) {
                                   return 'Please enter your name';
                                 }
+                                return null;
                               },
                               decoration: InputDecoration(
                                   icon: Icon(
@@ -125,6 +129,7 @@ class _ComplaintState extends State<Complaint>
                                     int.parse(value) < 5555555555) {
                                   return 'Please enter a valid phone number';
                                 }
+                                return null;
                               },
                               decoration: InputDecoration(
                                   icon: Icon(
@@ -361,7 +366,7 @@ class _ComplaintState extends State<Complaint>
                               autocorrect: false,
                               controller: _consumerController,
                               maxLines: 1,
-                              validator: (value) {},
+                              //validator: (value) {},
                               decoration: InputDecoration(
                                   icon: Icon(
                                     Icons.person_outline,
@@ -393,6 +398,7 @@ class _ComplaintState extends State<Complaint>
                                 if (value.isEmpty || value.length < 1) {
                                   return 'Please enter details about your issue';
                                 }
+                                return null;
                               },
                               decoration: InputDecoration(
                                   icon: Icon(
@@ -450,6 +456,7 @@ class _ComplaintState extends State<Complaint>
                                     (DateTime.now().millisecondsSinceEpoch %
                                             1000)
                                         .toString();
+
                                 String refNum =
                                     "PWL${_nameController.text.substring(0, 3).toUpperCase()}${_phoneController.text}$now";
                                 print(refNum);
@@ -467,14 +474,21 @@ class _ComplaintState extends State<Complaint>
                                   'village': _village,
                                   'details': _detailsController.text,
                                   'current department': _selectedDepartment,
-                                  'date': DateTime.now().toString(),
+                                  'date':
+                                      DateFormat.yMd().format(DateTime.now()),
                                   'status': "Processing",
                                   'trackingId': refNum,
                                   'AdminRemark': null,
                                   'DepartmentRemark': null,
                                   'Ignored': null
                                 }).then((value) => print("Success"));
-                                bottomSheet("SUCCESS!", refNum, context);
+                                scaffoldKey.currentState.showBottomSheet((context){
+                                  return CustomBottomSheet(
+                                        title: 'SUCCESS',
+                                        refNum: refNum,
+                                      );
+                                });
+                                //bottomSheet("SUCCESS!", refNum, context);
                               }
                             },
                             color: Colors.black,

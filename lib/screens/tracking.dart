@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:samadhan/data/constants.dart';
 import 'package:samadhan/services/firestoreService.dart';
+import 'package:samadhan/widgets/tracksheet.dart';
 
 class Tracking extends StatefulWidget {
   @override
@@ -88,14 +89,21 @@ class _TrackingState extends State<Tracking>
                               await getTrackingDetails(trackID: trackID);
                           String phone =
                               await getPhoneDetails(trackID: trackID);
-                          String dept = await getDeptDetails(trackID: trackID);
+
                           String currDept =
                               await getCurrDetails(trackID: trackID);
                           String status =
                               await getStatusDetails(trackID: trackID);
                           String date = await getDateDetails(trackID: trackID);
-                          trackSheet(name, phone, date, dept, currDept, status,
-                              context);
+                          _scaffoldKey.currentState.showBottomSheet((context) {
+                            return TrackSheet(
+                              name: name,
+                              currdept: currDept,
+                              date: date,
+                              phone: phone,
+                              status: status,
+                            );
+                          });
                         } else {
                           showDialog(
                               context: context,
