@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 List<String> depts = [
   "None",
@@ -55,7 +56,7 @@ var complaintText = RichText(
       text: "File",
       style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 44,
+          fontSize: 40,
           letterSpacing: 1,
           color: Colors.black),
       children: <TextSpan>[
@@ -63,7 +64,7 @@ var complaintText = RichText(
             text: "Complaint",
             style: TextStyle(
                 letterSpacing: 1,
-                fontSize: 44,
+                fontSize: 40,
                 color: Colors.grey[500],
                 fontFamily: "Sans Serif"))
       ]),
@@ -74,7 +75,7 @@ var trackText = RichText(
       text: "Track",
       style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 44,
+          fontSize: 40,
           letterSpacing: 1,
           color: Colors.black),
       children: <TextSpan>[
@@ -82,7 +83,7 @@ var trackText = RichText(
             text: "Complaint",
             style: TextStyle(
                 letterSpacing: 1,
-                fontSize: 44,
+                fontSize: 40,
                 color: Colors.grey[500],
                 fontFamily: "Sans Serif"))
       ]),

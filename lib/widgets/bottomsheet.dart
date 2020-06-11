@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final String title;
@@ -58,7 +59,7 @@ class CustomBottomSheet extends StatelessWidget {
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 30),
-                ),
+                ).text.xl2.make(),
                 Text(
                   '*Note down the tracking ID or take Screenshot',
                   style: TextStyle(

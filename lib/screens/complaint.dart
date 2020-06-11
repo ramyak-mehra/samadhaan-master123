@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:samadhan/data/constants.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:samadhan/widgets/bottomsheet.dart';
 
 class Complaint extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ComplaintState extends State<Complaint>
     super.dispose();
   }
 
+  bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -81,6 +83,7 @@ class _ComplaintState extends State<Complaint>
                             height: 25,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
@@ -114,6 +117,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
@@ -149,6 +153,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
@@ -176,6 +181,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
@@ -203,6 +209,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.black,
@@ -225,7 +232,7 @@ class _ComplaintState extends State<Complaint>
                                   ),
                                   focusColor: Colors.black,
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[600]),
+                                      fontSize: 15, color: Colors.grey[600]),
                                   elevation: 2,
                                   hint: Text('Ward Number                  ',
                                       style: TextStyle(
@@ -256,6 +263,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.black,
@@ -278,7 +286,7 @@ class _ComplaintState extends State<Complaint>
                                   ),
                                   focusColor: Colors.black,
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[600]),
+                                      fontSize: 15, color: Colors.grey[600]),
                                   elevation: 2,
                                   hint: Text(
                                     'Village     ',
@@ -309,6 +317,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.black,
@@ -331,12 +340,12 @@ class _ComplaintState extends State<Complaint>
                                   ),
                                   focusColor: Colors.black,
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[600]),
+                                      fontSize: 15, color: Colors.grey[600]),
                                   elevation: 2,
                                   hint: Text(
                                     'Department ',
                                     style: TextStyle(color: Colors.grey),
-                                  ), // Not necessary for Option 1
+                                  ) ,// Not necessary for Option 1
                                   value: _selectedDepartment,
                                   onChanged: (newValue) {
                                     setState(() {
@@ -357,6 +366,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
@@ -385,6 +395,7 @@ class _ComplaintState extends State<Complaint>
                             height: 10,
                           ),
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.grey[300],
@@ -460,6 +471,9 @@ class _ComplaintState extends State<Complaint>
                                 String refNum =
                                     "PWL${_nameController.text.substring(0, 3).toUpperCase()}${_phoneController.text}$now";
                                 print(refNum);
+                                setState(() {
+                                  loading = true;
+                                });
                                 await databaseReference
                                     .collection("complaints")
                                     .document(refNum)
@@ -482,11 +496,15 @@ class _ComplaintState extends State<Complaint>
                                   'DepartmentRemark': null,
                                   'Ignored': null
                                 }).then((value) => print("Success"));
-                                scaffoldKey.currentState.showBottomSheet((context){
+                                setState(() {
+                                  loading = false;
+                                });
+                                scaffoldKey.currentState
+                                    .showBottomSheet((context) {
                                   return CustomBottomSheet(
-                                        title: 'SUCCESS',
-                                        refNum: refNum,
-                                      );
+                                    title: 'SUCCESS',
+                                    refNum: refNum,
+                                  );
                                 });
                                 //bottomSheet("SUCCESS!", refNum, context);
                               }
@@ -499,7 +517,14 @@ class _ComplaintState extends State<Complaint>
                               "SUBMIT",
                               style: TextStyle(fontSize: 18),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          loading ? CircularProgressIndicator() : Container(),
+                          SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
                     ),

@@ -70,7 +70,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             Icon(
                               Icons.edit,
                               color: Colors.black,
-                              size: 70,
+                              size: 50,
                             ),
                             Text("COMPLAINT",
                                 style: TextStyle(
@@ -103,7 +103,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             Icon(
                               Icons.track_changes,
                               color: Colors.black,
-                              size: 70,
+                              size: 50,
                             ),
                             Text(
                               "TRACK",
@@ -116,7 +116,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ),
                     )
                   ],
-                )
+                ),
               ],
             ),
           ),
