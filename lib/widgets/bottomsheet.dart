@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:samadhan/screens/home.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final String title;
   final String refNum;
-  CustomBottomSheet({this.refNum, this.title});
+  final PersistentBottomSheetController controller;
+  CustomBottomSheet({this.refNum, this.title, this.controller});
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -19,6 +21,22 @@ class CustomBottomSheet extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Align(
+                  heightFactor: 1,
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => Home()));
+                      }),
+                ),
                 Text(
                   title,
                   style: TextStyle(
@@ -33,7 +51,7 @@ class CustomBottomSheet extends StatelessWidget {
                   tag: '',
                   child: Icon(
                     Icons.check_circle_outline,
-                    size: 200,
+                    size: 170,
                     color: Colors.black,
                   ),
                 ),

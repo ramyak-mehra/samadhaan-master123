@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:samadhan/data/constants.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:samadhan/widgets/bottomsheet.dart';
 
 class Complaint extends StatefulWidget {
@@ -23,8 +22,8 @@ class _ComplaintState extends State<Complaint>
   TextEditingController _consumerController = new TextEditingController();
 
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  PersistentBottomSheetController _controller;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   String _selectedDepartment;
   String _wardNumber;
   String _village;
@@ -37,6 +36,7 @@ class _ComplaintState extends State<Complaint>
     _detailsController.dispose();
     _animationController.dispose();
     _consumerController.dispose();
+
     super.dispose();
   }
 
@@ -44,6 +44,7 @@ class _ComplaintState extends State<Complaint>
   @override
   void initState() {
     super.initState();
+
     _animationController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 600));
     _animation =
@@ -345,7 +346,7 @@ class _ComplaintState extends State<Complaint>
                                   hint: Text(
                                     'Department ',
                                     style: TextStyle(color: Colors.grey),
-                                  ) ,// Not necessary for Option 1
+                                  ), // Not necessary for Option 1
                                   value: _selectedDepartment,
                                   onChanged: (newValue) {
                                     setState(() {
@@ -461,8 +462,35 @@ class _ComplaintState extends State<Complaint>
                                         )
                                       ],
                                     ));
-                              }
-                              if (_formkey.currentState.validate()) {
+                              } else if (!(_formkey.currentState.validate())) {
+                                showDialog(
+                                    context: context,
+                                    child: AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      title: Text(
+                                        "TRY AGAIN",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      content:
+                                          Text("Please Check Your Detials"),
+                                      actions: <Widget>[
+                                        MaterialButton(
+                                          child: Text(
+                                            "RETRY",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ));
+                              } else {
                                 String now =
                                     (DateTime.now().millisecondsSinceEpoch %
                                             1000)
@@ -499,11 +527,12 @@ class _ComplaintState extends State<Complaint>
                                 setState(() {
                                   loading = false;
                                 });
-                                scaffoldKey.currentState
+                                _controller = scaffoldKey.currentState
                                     .showBottomSheet((context) {
                                   return CustomBottomSheet(
                                     title: 'SUCCESS',
                                     refNum: refNum,
+                                    controller: _controller,
                                   );
                                 });
                                 //bottomSheet("SUCCESS!", refNum, context);

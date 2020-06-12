@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:samadhan/screens/home.dart';
 
 class TrackSheet extends StatelessWidget {
   final String name;
@@ -20,6 +21,22 @@ class TrackSheet extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Align(
+                heightFactor: 1,
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Colors.black,
+                      size: 35,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Home()));
+                    }),
+              ),
               Text(
                 "Name:",
                 style: TextStyle(
@@ -110,6 +127,6 @@ class TrackSheet extends StatelessWidget {
         ),
       ),
     );
-    ;
+    
   }
 }
