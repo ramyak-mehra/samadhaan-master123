@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:samadhan/data/constants.dart';
 import 'package:samadhan/widgets/bottomsheet.dart';
+import 'dart:io';
 
 class Complaint extends StatefulWidget {
   @override
@@ -41,10 +42,16 @@ class _ComplaintState extends State<Complaint>
   }
 
   bool loading = false;
+  callback(bool value) {
+    setState(() {
+      loading = value;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
+    checkInternet();
     _animationController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 600));
     _animation =
@@ -502,39 +509,56 @@ class _ComplaintState extends State<Complaint>
                                 setState(() {
                                   loading = true;
                                 });
-                                await databaseReference
-                                    .collection("complaints")
-                                    .document(refNum)
-                                    .setData({
-                                  'consumerId': _consumerController.text,
-                                  'name': _nameController.text,
-                                  'phone': _phoneController.text,
-                                  'house no': _houseController.text,
-                                  'colony': _colonyController.text,
-                                  'department': _selectedDepartment,
-                                  'ward no': _wardNumber,
-                                  'village': _village,
-                                  'details': _detailsController.text,
-                                  'current department': _selectedDepartment,
-                                  'date':
-                                      DateFormat.yMd().format(DateTime.now()),
-                                  'status': "Processing",
-                                  'trackingId': refNum,
-                                  'AdminRemark': null,
-                                  'DepartmentRemark': null,
-                                  'Ignored': null
-                                }).then((value) => print("Success"));
+                                responeTimer();
+                                bool result = await checkInternet();
+                                if (!result) {
+                                  print('result checked $result');
+                                  setState(() {
+                                    loading = false;
+                                  });
+
+                                  showDialog(
+                                      context: context,
+                                      child: AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        title: Text(
+                                          "TRY AGAIN",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        content: Text(
+                                            "Please Check Your Internet Connection"),
+                                        actions: <Widget>[
+                                          MaterialButton(
+                                            child: Text(
+                                              "RETRY",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      ));
+                                } else {
+                                  await sendData(refNum);
+                                  _controller = scaffoldKey.currentState
+                                      .showBottomSheet((context) {
+                                    return CustomBottomSheet(
+                                      title: 'SUCCESS',
+                                      refNum: refNum,
+                                      controller: _controller,
+                                    );
+                                  });
+                                }
                                 setState(() {
                                   loading = false;
                                 });
-                                _controller = scaffoldKey.currentState
-                                    .showBottomSheet((context) {
-                                  return CustomBottomSheet(
-                                    title: 'SUCCESS',
-                                    refNum: refNum,
-                                    controller: _controller,
-                                  );
-                                });
+
                                 //bottomSheet("SUCCESS!", refNum, context);
                               }
                             },
@@ -563,5 +587,59 @@ class _ComplaintState extends State<Complaint>
             ),
           ),
         ));
+  }
+
+  void responeTimer() async {
+    print('timer fired');
+    await Future.delayed(Duration(seconds: 10))
+        .then((value) => callback(false));
+  }
+
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        return true;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      return false;
+    }
+    return false;
+  }
+
+  Future<bool> sendData(String refNum) async {
+    try {
+      await databaseReference
+          .collection("complaints")
+          .document(refNum)
+          .setData({
+        'consumerId': _consumerController.text,
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'house no': _houseController.text,
+        'colony': _colonyController.text,
+        'department': _selectedDepartment,
+        'ward no': _wardNumber,
+        'village': _village,
+        'details': _detailsController.text,
+        'current department': _selectedDepartment,
+        'date': DateFormat.yMd().format(DateTime.now()),
+        'status': "Processing",
+        'trackingId': refNum,
+        'AdminRemark': null,
+        'DepartmentRemark': null,
+        'Ignored': null
+      }).then((value) {
+        print("Success");
+        return true;
+      });
+    } catch (e) {
+      print(e);
+      print('please try again');
+      return false;
+    }
+    return false;
   }
 }
