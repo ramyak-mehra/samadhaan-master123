@@ -31,7 +31,7 @@ class CustomBottomSheet extends StatelessWidget {
                         size: 35,
                       ),
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) => Home()));
